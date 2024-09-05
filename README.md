@@ -1,3 +1,4 @@
 # greptimedb-sqlalchemy
 
-Describe your project here.
+SQLAlchemy and Superset connector for
+[GreptimeDB](https://github.com/greptimeteam/greptimedb).
