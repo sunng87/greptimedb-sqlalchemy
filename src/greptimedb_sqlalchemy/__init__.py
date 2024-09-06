@@ -1,7 +1,15 @@
 import abc
 
+import logging
+
+# Configure the logging
+logging.basicConfig(level=logging.ERROR)
+logger = logging.getLogger(__name__)
+
 import sqlalchemy
 from sqlalchemy.dialects.postgresql.psycopg2 import PGDialect_psycopg2
+
+from .types import resolve_data_type
 
 
 def connection_uri(
@@ -44,10 +52,15 @@ class GreptimeDBDialect(PGDialect_psycopg2, abc.ABC):
         return dbapi
 
     def get_schema_names(self, conn, **kw):
+        logger.info(f"getting schema names")
         return [row[0] for row in self._exec(conn, "SHOW DATABASES")]
 
     def get_table_names(self, conn, schema=None, **kw):
-        return [row[0] for row in self._exec(conn, "SHOW TABLES")]
+        logger.info(f"getting table names {schema}")
+        schema = schema or "public"
+        result = [row[0] for row in self._exec(conn, f"SHOW TABLES FROM {schema}")]
+        logger.info(f"getting result {result}")
+        return result
 
     def has_table(self, conn, table_name, schema=None):
         return table_name in set(self.get_table_names(conn, schema))
@@ -55,11 +68,31 @@ class GreptimeDBDialect(PGDialect_psycopg2, abc.ABC):
     @sqlalchemy.engine.reflection.cache
     def get_columns(self, conn, table_name, schema=None, **kw):
         schema_name = schema or "public"
+        logger.info(f"getting column names {schema_name}, {table_name}")
         columns = self._exec(
             conn,
-            f"SELECT column_name, column_type, is_nullable FROM information_schema.columns WHERE table_schema = '{schema_name}' AND 'table_name' = '{table_name}'",
+            f"SELECT column_name, greptime_data_type, is_nullable, column_comment FROM information_schema.columns WHERE table_schema = '{schema_name}' AND table_name = '{table_name}'",
         )
-        return [{"name": row[0], "type": row[1], "nullable": row[2]} for row in columns]
+        ## FIXME: coltype for type
+        result = [
+            {
+                "name": row[0],
+                "type": resolve_data_type(row[1])(),
+                "nullable": row[2],
+                "comment": row[3],
+            }
+            for row in columns
+        ]
+        logger.info(f"getting column results {result}")
+        return result
+
+    def get_table_comment(self, conn, table_name, schema=None, **kw):
+        schema_name = schema or "public"
+        c = self._exec(
+            conn,
+            f"SELECT table_comment FROM information_schema.tables WHERE table_schema = '{schema_name}' AND table_name = '{table_name}'",
+        )
+        return {"text": c.scalar()}
 
     def get_pk_constraint(self, conn, table_name, schema=None, **kw):
         return []
@@ -126,4 +159,4 @@ class GreptimeDBDialect(PGDialect_psycopg2, abc.ABC):
         pass
 
     def _hstore_oids(self, conn):
-        None
+        return None

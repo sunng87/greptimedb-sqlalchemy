@@ -9,13 +9,13 @@ import logging
 logging.basicConfig(level=logging.ERROR)
 logger = logging.getLogger(__name__)
 
-from superset.db_engine_specs.base import BasicParametersType
+from superset.db_engine_specs.base import BasicParametersType, BaseEngineSpec
 from superset.db_engine_specs.postgres import PostgresEngineSpec
 
 from superset.constants import TimeGrain
 
 
-class GreptimeDBEngineSpec(PostgresEngineSpec):
+class GreptimeDBEngineSpec(BaseEngineSpec):
     engine = "greptimedb"
     engine_aliases = {"greptime"}
     engine_name = "GreptimeDB"
@@ -25,13 +25,13 @@ class GreptimeDBEngineSpec(PostgresEngineSpec):
     time_groupby_inline = False
     allows_hidden_cc_in_orderby = True
     time_secondary_columns = True
-    try_remove_schema_from_table_name = True
+    try_remove_schema_from_table_name = False
     max_column_name_length = 63
     top_keywords: set[str] = set({})
 
-    supports_dynamic_schema = True
-    supports_catalog = True
-    supports_dynamic_catalog = True
+    supports_dynamic_schema = False
+    supports_catalog = False
+    supports_dynamic_catalog = False
 
     _time_grain_expressions = {
         None: "{col}",
@@ -60,8 +60,7 @@ class GreptimeDBEngineSpec(PostgresEngineSpec):
 
     @classmethod
     def get_default_schema_for_query(cls, database, query) -> str | None:
-        """Return the default schema for a given query."""
-        return "public"
+        return None
 
     @classmethod
     def get_allow_cost_estimate(cls, extra: dict[str, Any]) -> bool:
@@ -75,3 +74,21 @@ class GreptimeDBEngineSpec(PostgresEngineSpec):
         schema: str | None,
     ) -> set[str]:
         return set()
+
+    @classmethod
+    def get_table_comment(cls, inspector, table) -> str | None:
+        logger.info(f"getting table comment {table}")
+        return None
+
+    @classmethod
+    def get_indexes(
+        cls,
+        database,
+        inspector,
+        table,
+    ) -> list[dict[str, Any]]:
+        return []
+
+    @classmethod
+    def get_table_names(cls, database, inspector, schema: str | None) -> set[str]:
+        return set(inspector.get_table_names(schema))

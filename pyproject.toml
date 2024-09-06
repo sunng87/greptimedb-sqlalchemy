@@ -1,6 +1,6 @@
 [project]
 name = "greptimedb-sqlalchemy"
-version = "0.1.5"
+version = "0.1.6"
 description = "SQLAlchemy support for GreptimeDB"
 authors = [
     { name = "Ning Sun", email = "sunning@greptime.com" }
@@ -24,7 +24,7 @@ classifiers = [
 greptimedb = 'greptimedb_sqlalchemy:GreptimeDBDialect'
 
 [project.entry-points.'superset.db_engine_specs']
-greptimedb = 'greptimedb.superset:GreptimeDBEngineSpec'
+greptimedb = 'greptimedb_sqlalchemy.superset:GreptimeDBEngineSpec'
 
 [build-system]
 requires = ["hatchling"]
