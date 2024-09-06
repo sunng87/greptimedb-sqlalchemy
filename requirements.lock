@@ -5,8 +5,14 @@
 #   pre: false
 #   features: []
 #   all-features: false
+#   with-sources: false
+#   generate-hashes: false
+#   universal: false
 
 -e file:.
 greenlet==3.0.3
+    # via sqlalchemy
 psycopg2==2.9.9
+    # via greptimedb-sqlalchemy
 sqlalchemy==1.4.54
+    # via greptimedb-sqlalchemy

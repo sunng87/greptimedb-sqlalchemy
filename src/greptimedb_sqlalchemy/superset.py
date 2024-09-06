@@ -15,7 +15,7 @@ from superset.db_engine_specs.postgres import PostgresEngineSpec
 from superset.constants import TimeGrain
 
 
-class QuestDbEngineSpec(PostgresEngineSpec):
+class GreptimeDBEngineSpec(PostgresEngineSpec):
     engine = "greptimedb"
     engine_aliases = {"greptime"}
     engine_name = "GreptimeDB"

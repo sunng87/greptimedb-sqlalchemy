@@ -5,8 +5,8 @@ threadsafety = 2
 paramstyle = "pyformat"
 
 
-# class Error(Exception):
-#     pass
+class Error(Exception):
+    pass
 
 
 def connect(**kwargs):
