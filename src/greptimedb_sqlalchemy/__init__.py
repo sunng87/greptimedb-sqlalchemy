@@ -35,7 +35,7 @@ class GreptimeDBDialect(PGDialect_psycopg2, abc.ABC):
     supports_multivalues_insert = True
     supports_comments = True
     postfetch_lastrowid = False
-    _has_native_hstore = False
+    use_native_hstore = False
 
     @classmethod
     def dbapi(cls):
@@ -121,3 +121,9 @@ class GreptimeDBDialect(PGDialect_psycopg2, abc.ABC):
 
     def _exec(self, conn, sql_query):
         return conn.execute(sqlalchemy.text(sql_query))
+
+    def on_connect(self):
+        pass
+
+    def _hstore_oids(self, conn):
+        None
