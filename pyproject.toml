@@ -1,6 +1,6 @@
 [project]
 name = "greptimedb-sqlalchemy"
-version = "0.1.6"
+version = "0.1.7"
 description = "SQLAlchemy support for GreptimeDB"
 authors = [
     { name = "Ning Sun", email = "sunning@greptime.com" }
