@@ -4,8 +4,8 @@ import logging
 logging.basicConfig(level=logging.ERROR)
 logger = logging.getLogger(__name__)
 
-
 from sqlalchemy.types import (
+    TypeDecorator,
     String as SAString,
     LargeBinary,
     SmallInteger,
@@ -19,83 +19,117 @@ from sqlalchemy.types import (
 )
 
 
-class String(SAString):
+class GreptimeType(TypeDecorator):
+    impl = None
+    cache_ok = True
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def process_bind_param(self, value, dialect):
+        return value
+
+    def process_result_value(self, value, dialect):
+        return value
+
+
+class String(GreptimeType):
+    impl = SAString
     __visit_name__ = "String"
 
 
-class Binary(LargeBinary):
+class Binary(GreptimeType):
+    impl = LargeBinary
     __visit_name__ = "Binary"
 
 
-class Int8(SmallInteger):
+class Int8(GreptimeType):
+    impl = SmallInteger
     __visit_name__ = "Int8"
 
 
-class Int16(SmallInteger):
+class Int16(GreptimeType):
+    impl = SmallInteger
     __visit_name__ = "Int16"
 
 
-class Int32(Integer):
+class Int32(GreptimeType):
+    impl = Integer
     __visit_name__ = "Int32"
 
 
-class Int64(BigInteger):
+class Int64(GreptimeType):
+    impl = BigInteger
     __visit_name__ = "Int64"
 
 
-class UInt8(Integer):
+class UInt8(GreptimeType):
+    impl = Integer
     __visit_name__ = "UInt8"
 
 
-class UInt16(Integer):
+class UInt16(GreptimeType):
+    impl = Integer
     __visit_name__ = "UInt16"
 
 
-class UInt32(BigInteger):
+class UInt32(GreptimeType):
+    impl = BigInteger
     __visit_name__ = "UInt32"
 
 
-class UInt64(BigInteger):
+class UInt64(GreptimeType):
+    impl = BigInteger
     __visit_name__ = "UInt64"
 
 
-class Float32(Float):
+class Float32(GreptimeType):
+    impl = Float
     __visit_name__ = "Float32"
 
 
-class Float64(Float):
+class Float64(GreptimeType):
+    impl = Float
     __visit_name__ = "Float64"
 
 
-class TimestampSecond(DateTime):
+class TimestampSecond(GreptimeType):
+    impl = DateTime
     __visit_name__ = "TimestampSecond"
 
 
-class TimestampMillisecond(DateTime):
+class TimestampMillisecond(GreptimeType):
+    impl = DateTime
     __visit_name__ = "TimestampMillisecond"
 
 
-class TimestampMicrosecond(DateTime):
+class TimestampMicrosecond(GreptimeType):
+    impl = DateTime
     __visit_name__ = "TimestampMicrosecond"
 
 
-class TimestampNanosecond(DateTime):
+class TimestampNanosecond(GreptimeType):
+    impl = DateTime
     __visit_name__ = "TimestampNanosecond"
 
 
-class Decimal(Numeric):
+class Decimal(GreptimeType):
+    impl = Numeric
     __visit_name__ = "Decimal"
 
 
-class Date(Date):
+class Date(GreptimeType):
+    impl = Date
     __visit_name__ = "Date"
 
 
-class DateTime(DateTime):
+class DateTime(GreptimeType):
+    impl = DateTime
     __visit_name__ = "DateTime"
 
 
-class Boolean(Boolean):
+class Boolean(GreptimeType):
+    impl = Boolean
     __visit_name__ = "Boolean"
 
 
