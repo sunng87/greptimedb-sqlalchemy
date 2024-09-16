@@ -4,10 +4,6 @@ import re
 from typing import Any
 import logging
 
-# Configure the logging
-logging.basicConfig(level=logging.ERROR)
-logger = logging.getLogger(__name__)
-
 from sqlalchemy.engine.reflection import Inspector
 from superset.constants import TimeGrain
 from superset.db_engine_specs.base import BasicParametersType, BaseEngineSpec
@@ -15,6 +11,10 @@ from sqlalchemy.types import TypeEngine
 from superset.utils.core import GenericDataType, ColumnSpec, ColumnTypeSource
 
 from . import types
+
+# Configure the logging
+logging.basicConfig(level=logging.ERROR)
+logger = logging.getLogger(__name__)
 
 
 class GreptimeDBEngineSpec(BaseEngineSpec):

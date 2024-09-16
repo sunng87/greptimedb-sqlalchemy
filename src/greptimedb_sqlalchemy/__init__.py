@@ -1,15 +1,15 @@
 import abc
 
 import logging
-
-# Configure the logging
-logging.basicConfig(level=logging.ERROR)
-logger = logging.getLogger(__name__)
-
 import sqlalchemy
 from sqlalchemy.dialects.postgresql.psycopg2 import PGDialect_psycopg2
 
 from .types import resolve_data_type
+
+
+# Configure the logging
+logging.basicConfig(level=logging.ERROR)
+logger = logging.getLogger(__name__)
 
 
 def connection_uri(
@@ -52,7 +52,7 @@ class GreptimeDBDialect(PGDialect_psycopg2, abc.ABC):
         return dbapi
 
     def get_schema_names(self, conn, **kw):
-        logger.info(f"getting schema names")
+        logger.info("getting schema names")
         return [row[0] for row in self._exec(conn, "SHOW DATABASES")]
 
     def get_table_names(self, conn, schema=None, **kw):

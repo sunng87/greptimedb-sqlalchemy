@@ -1,9 +1,5 @@
 import logging
 
-# Configure the logging
-logging.basicConfig(level=logging.ERROR)
-logger = logging.getLogger(__name__)
-
 from sqlalchemy.types import (
     TypeDecorator,
     String as SAString,
@@ -17,6 +13,10 @@ from sqlalchemy.types import (
     Boolean,
     Numeric,
 )
+
+# Configure the logging
+logging.basicConfig(level=logging.ERROR)
+logger = logging.getLogger(__name__)
 
 
 class GreptimeType(TypeDecorator):
