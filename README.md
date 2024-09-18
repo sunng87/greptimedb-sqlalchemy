@@ -5,7 +5,7 @@
 SQLAlchemy and Superset connector for
 [GreptimeDB](https://github.com/greptimeteam/greptimedb).
 
-This is a work in progress.
+![screenshot](screenshot.png)
 
 ## Superset
 
