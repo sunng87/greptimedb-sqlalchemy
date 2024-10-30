@@ -3,7 +3,9 @@
 ![PyPI - Version](https://img.shields.io/pypi/v/greptimedb-sqlalchemy)
 
 SQLAlchemy and Superset connector for
-[GreptimeDB](https://github.com/greptimeteam/greptimedb).
+[GreptimeDB](https://github.com/greptimeteam/greptimedb). This
+connector is developed against Superset master branch. It is expected
+to work with upcoming 4.1 release.
 
 ![screenshot](screenshot.png)
 
